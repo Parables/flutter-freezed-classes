@@ -1,0 +1,6 @@
+schema: example/schema.graphql
+# documents: "./example/**/*.graphql"
+generates:
+  example/generated/app_models.dart:
+    plugins:
+      - ./dist/main/index.js:
