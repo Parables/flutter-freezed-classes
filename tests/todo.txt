@@ -1,0 +1,1 @@
+1. Test that given a schema, ignoreTypes when supplied with a list of type names wont generate freezed classes for those types 

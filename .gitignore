@@ -4,3 +4,5 @@ dist
 package-lock.json
 .DS_Store
 tsconfig.tsbuildinfo
+example/_*.graphql
+example/*.ts
