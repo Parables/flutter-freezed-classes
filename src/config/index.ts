@@ -89,7 +89,7 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
   /**
    * @name customScalars
    * @description specify how custom scalar types in your GraphQL Schema should be typed in Dart
-   * @default true
+   * @default {}
    *
    * @exampleMarkdown
    * ```yml
@@ -112,6 +112,39 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
    */
 
   customScalars?: { [name: string]: string };
+
+  /**
+   * @name unionInputs
+   * @description specify how custom scalar types in your GraphQL Schema should be typed in Dart
+   * @default {}
+   *
+   * @exampleMarkdown
+   * ```yml
+   * generates:
+   *   path/to/your/flutter/project/data/models/app_models.dart
+   *     plugins:
+   *       - typescript
+   *       - graphql-codegen-flutter-freezed-classes
+   *     config:
+   *       fileName: app_models
+   *       ignoreTypes: ["PaginatorInfo"]
+   *       fromJsonToJson: true
+   *       customScalars:
+   *         {
+   *           "jsonb": "Map<String, dynamic>",
+   *           "timestamptz": "DateTime",
+   *           "UUID": "String",
+   *         }
+   *      unionInputs:
+   *        {
+   *          'CreateMovieInput': ['Movie', 'createInput'],
+   *          'UpdateMovieInput': ['Movie', 'updateInput'],
+   *          'DeleteMovieInput': ['Movie', 'deleteInput'],
+   *        }
+   * ```
+   */
+
+  unionInputs?: { [name: string]: string };
 
   /**
    * @name optionalConstructor

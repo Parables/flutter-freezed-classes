@@ -2,6 +2,10 @@
 
 This project aims to speed up your development of Flutter apps by generating [Freezed](https://pub.dev/packages/freezed) from your GraphQL schema.
 
+## Todo
+
+- [] Submit PR to [visitor-plugin-common](@graphql-codegen/visitor-plugin-common/index.js), to add `|| this._kind === 'class'` to line: 350
+
 ## Features
 
 - [x] Generate Freezed classes for ObjectTypes
@@ -14,7 +18,7 @@ This project aims to speed up your development of Flutter apps by generating [Fr
 - [] Support directives
 - [] Support deprecation annotation
 - [] Support for InterfaceTypes
-- [] Support for UnionTypes [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
+- [x] Support for UnionTypes [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
 - [] Support for InputTypes as union/sealed classes [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
 
 ## Example:
@@ -32,12 +36,106 @@ generates:
       lowercaseEnums: false # default: true
       customScalars: { 'jsonb': 'Map<String, dynamic>', 'timestamptz': 'DateTime', 'UUID': 'String' }
       ignoreTypes: ['PageInfo', 'UserPaginator', 'PaginatorInfo']
-      # unionInputs: { 'CreateBookInput': ['Book', 'createInput'], 'UpdateBookInput': ['Book', 'updateInput'] }
+      unionInputs:
+        {
+          'CreateMovieInput': ['Movie', 'createInput'],
+          'UpdateMovieInput': ['Movie', 'updateInput'],
+          'DeleteMovieInput': ['Movie', 'deleteInput'],
+        }
 ```
 
 ```graphql
 # schema.graphql
-type Test {
+type Movie {
+  id: ID!
+  title: String!
+}
+
+input CreateMovieInput {
+  title: String!
+}
+
+input CreateMovieInput {
+  title: String!
+}
+
+input UpsertMovieInput {
+  id: ID!
+  title: String!
+}
+
+input UpdateMovieInput {
+  id: ID!
+  title: String
+}
+
+input DeleteMovieInput {
+  id: ID!
+}
+
+enum Episode {
+  NEWHOPE
+  EMPIRE
+  JEDI
+}
+
+type Starship {
+  id: ID!
+  name: String!
+  length(unit: LengthUnit = METER): Float
+}
+
+interface Character {
+  id: ID!
+  name: String!
+  friends: [Character]
+  appearsIn: [Episode]!
+}
+
+type Character {
+  name: String!
+  appearsIn: [Episode]!
+}
+
+type Human implements Character {
+  id: ID!
+  name: String!
+  friends: [Character]
+  appearsIn: [Episode]!
+  starships: [Starship]
+  totalCredits: Int
+}
+
+type Droid implements Character {
+  id: ID!
+  name: String!
+  friends: [Character]
+  appearsIn: [Episode]!
+  primaryFunction: String
+}
+
+union SearchResult = Human | Droid | Starship
+
+# tests
+
+scalar UUID
+scalar timestamptz
+scalar jsonb
+
+# cyclic references/nested types
+input AInput {
+  b: BInput!
+}
+
+input BInput {
+  c: CInput!
+}
+
+input CInput {
+  a: AInput!
+}
+
+type ComplexType {
   a: [String]
   b: [ID!]
   c: [Boolean!]!
@@ -47,36 +145,6 @@ type Test {
   g: jsonb
   h: timestamptz!
   i: UUID!
-}
-
-input AInput {
-  b: BInput!
-}
-input BInput {
-  c: CInput!
-}
-input CInput {
-  a: AInput!
-}
-
-enum Episode {
-  NEWHOPE
-  EMPIRE
-  JEDI
-}
-
-enum Gender {
-  FEMALE
-  MALE
-}
-
-type Book {
-  id: ID!
-  title: String!
-}
-
-input CreateBookInput {
-  title: String!
 }
 ```
 
@@ -125,8 +193,8 @@ class CInput with _$CInput{
 };
 
 @freezed
-class Test with _$Test{
-   const factory Test({
+class ComplexType with _$ComplexType{
+   const factory ComplexType({
      List<String?>? a,
      List<String>? b,
     required List<bool> c,
@@ -136,24 +204,24 @@ class Test with _$Test{
      Map<String, dynamic>? g,
     required DateTime h,
     required String i
-  }) = _Test;
+  }) = _ComplexType;
 
-  factory Test.fromJson(Map<String, dynamic> json) => _$TestFromJson(json);
+  factory ComplexType.fromJson(Map<String, dynamic> json) => _$ComplexTypeFromJson(json);
 };
 
 // TODO: Support for InputTypes as union/sealed classes
 @freezed
-class Book with _$Book {
-  factory Book({
+class Movie with _$Movie {
+  factory Movie({
     required String id,
     required String title,
-  }) = _Book;
+  }) = _Movie;
 
-  factory Book.createInput({
+  factory Movie.createInput({
     required String title,
-  }) = _CreateBookInput;
+  }) = _CreateMovieInput;
 
-  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+  factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 }
 ```
 

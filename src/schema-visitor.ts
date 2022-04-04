@@ -5,12 +5,13 @@ import {
   GraphQLSchema,
   InputObjectTypeDefinitionNode,
   InputValueDefinitionNode,
+  Kind,
   ListTypeNode,
   NamedTypeNode,
   NonNullTypeNode,
   ObjectTypeDefinitionNode,
-  ScalarTypeDefinitionNode,
   TypeNode,
+  UnionTypeDefinitionNode,
 } from 'graphql';
 import { FlutterFreezedClassPluginConfig } from './config/index';
 
@@ -27,17 +28,23 @@ const defaultScalars: { [name: string]: string } = {
 };
 // const isInput = (kind: string) => kind.includes('Input');
 
+const shapeMap: Map<string, string> = new Map<string, string>();
+
+const buildImports = (config: FlutterFreezedClassPluginConfig) => {
+  const gImport = `part '${config.fileName}.g.dart';\n\n`;
+  return [
+    "import 'package:freezed_annotation/freezed_annotation.dart';",
+    "import 'package:flutter/foundation.dart';\n",
+    `part '${config.fileName}.freezed.dart;`,
+    `${config.fromJsonToJson ?? true ? gImport : ''}`,
+  ];
+};
+
 export const schemaVisitor = (schema: GraphQLSchema, config: FlutterFreezedClassPluginConfig) => {
-  const freezedImports = `
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
-
-part '${config.fileName}.freezed.dart;
-${config.fromJsonToJson ?? true ? "part '${config.fileName}.g.dart';" : ''}
-`;
-
   return {
-    buildImports: (): string[] => [freezedImports],
+    buildImports,
+
+    shapeMap,
 
     EnumTypeDefinition: (node: EnumTypeDefinitionNode) => {
       const name = convertName(node.name.value);
@@ -58,55 +65,63 @@ ${config.fromJsonToJson ?? true ? "part '${config.fileName}.g.dart';" : ''}
       return new DeclarationBlock({}).asKind('enum').withName(name).withContent(`{\n ${shape} \n}`).string;
     },
 
-    ObjectTypeDefinition: (node: ObjectTypeDefinitionNode) => {
-      const name = convertName(node.name.value);
-      const fromJsonToJson = `factory ${name}.fromJson(Map<String, dynamic> json) => _$${name}FromJson(json);`;
+    UnionTypeDefinition: (node: UnionTypeDefinitionNode) => generateBlock(config, node),
 
-      const shape = node.fields?.map(field => generateField(config, field, 2)).join(',\n');
+    ObjectTypeDefinition: (node: ObjectTypeDefinitionNode) => generateBlock(config, node),
 
-      // don't generate freezed classes for these types
-      if (['Query', 'Mutation', 'Subscription', ...(config.ignoreTypes ?? [])].includes(name)) {
-        return '';
-      }
-
-      return (
-        new DeclarationBlock({})
-          .withDecorator('@freezed')
-          .asKind('class')
-          .withName(`${name} with _$${name}{\n`)
-          // .withBlock([indent(`factory ${name}({`)].join('\n')).string
-          .withContent(
-            [
-              indent(`${addComment(node.description?.value)}const factory ${name}({`),
-              shape,
-              indent(`}) = _${name};\n`),
-              indent(`${config.fromJsonToJson ?? true ? fromJsonToJson : ''}`),
-              '}',
-            ].join('\n')
-          ).string
-      );
-    },
-
-    InputObjectTypeDefinition: (node: InputObjectTypeDefinitionNode) => {
-      const name = convertName(node.name.value);
-      const fromJsonToJson = `factory ${name}.fromJson(Map<String, dynamic> json) => _$${name}FromJson(json);`;
-
-      const shape = node.fields?.map(field => generateField(config, field, 2)).join(',\n');
-      return new DeclarationBlock({})
-        .withDecorator('@freezed')
-        .asKind('class')
-        .withName(`${name} with _$${name}{\n`)
-        .withContent(
-          [
-            indent(`${addComment(node.description?.value)}const factory ${name}({`),
-            shape,
-            indent(`}) = _${name};\n`),
-            indent(`${config.fromJsonToJson ?? true ? fromJsonToJson : ''}`),
-            '}',
-          ].join('\n')
-        ).string;
-    },
+    InputObjectTypeDefinition: (node: InputObjectTypeDefinitionNode) => generateBlock(config, node),
   };
+};
+
+const generateBlock = (
+  config: FlutterFreezedClassPluginConfig,
+  node: ObjectTypeDefinitionNode | InputObjectTypeDefinitionNode | UnionTypeDefinitionNode
+) => {
+  const name = convertName(node.name.value);
+  const fromJsonToJson = `factory ${name}.fromJson(Map<String, dynamic> json) => _$${name}FromJson(json);`;
+
+  const shape =
+    node?.kind == Kind.UNION_TYPE_DEFINITION
+      ? node.types?.map(type => generateUnionTypeBlock(name, type.name.value)).join('') ?? ''
+      : node.fields?.map(field => generateField(config, field, 2)).join('') ?? '';
+
+  shapeMap.set(name, shape);
+
+  const content =
+    node?.kind == Kind.UNION_TYPE_DEFINITION
+      ? [
+          indent(`${addComment(node.description?.value)}\n`),
+          indent(`const factory ${name}({}) =  _${name};\n`),
+          shape,
+          indent(`\n\n${config.fromJsonToJson ?? true ? fromJsonToJson : ''}\n`),
+          '}',
+        ].join('')
+      : [
+          indent(`${addComment(node.description?.value)}\n`),
+          indent(`const factory ${name}({\n`),
+          shape,
+          indent(`}) = _${name};`),
+          indent(`\n\n${config.fromJsonToJson ?? true ? fromJsonToJson : ''}\n`),
+          '}',
+        ].join('');
+
+  // don't generate freezed classes for these types
+  if (['Query', 'Mutation', 'Subscription', ...(config.ignoreTypes ?? [])].includes(name)) {
+    return '';
+  }
+
+  return new DeclarationBlock({})
+    .withDecorator('@freezed')
+    .asKind('class')
+    .withName(`${name} with _$${name}{`)
+    .withContent(content).string;
+};
+
+const generateUnionTypeBlock = (unionName: string, typeName: string) => {
+  return new DeclarationBlock({})
+    .asKind(indent('const factory'))
+    .withName(`${unionName}.${typeName.toLowerCase()}({`)
+    .withContent(`===replace${typeName}===replace}) = _${typeName}`).string;
 };
 
 const generateField = (
@@ -119,7 +134,7 @@ const generateField = (
       config,
       field,
       field.type
-    )} ${field.name.value}`,
+    )} ${field.name.value},\n`,
     indentCount ?? 2
   );
 };
@@ -155,7 +170,7 @@ const scalarValue = (config: FlutterFreezedClassPluginConfig, scalarName: string
   return scalarName;
 };
 
-const addComment = (comment?: string) => (comment ? `/// ${comment}\n` : '');
+const addComment = (comment?: string) => (comment ? `/// ${comment}` : '');
 
 // TODO: Implement convertName to follow Dart's naming conversion
 const convertName = (name: string, type?: string, options?: { prefix?: string; suffix?: string }) => name;

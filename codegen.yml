@@ -10,7 +10,7 @@ generates:
       fromJsonToJson: true
       lowercaseEnums: false
       unionInputs:
-        - CreateBookInput: ["Book", "createInput"]
+        - CreateMovieInput: ["Movie", "createInput"]
       customScalars:
         {
           "jsonb": "Map<String, dynamic>",
