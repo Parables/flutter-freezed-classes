@@ -20,9 +20,9 @@ export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.Compl
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  result.definitions.forEach(def => {
-    console.log(def);
-  });
+  // result.definitions.forEach(def => {
+  //   console.log(def);
+  // });
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const generated = result.definitions.filter(def => typeof def === 'string');

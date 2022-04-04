@@ -1,6 +1,6 @@
-import { TypeScriptPluginConfig } from '@graphql-codegen/typescript';
+// import { TypeScriptPluginConfig } from '@graphql-codegen/typescript';
 
-export interface FlutterFreezedClassPluginConfig extends TypeScriptPluginConfig {
+export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConfig */ {
   /**
    * @name fileName
    * @description the name of the file without the extension that the freezed classes will be generated
@@ -85,6 +85,33 @@ export interface FlutterFreezedClassPluginConfig extends TypeScriptPluginConfig 
    */
 
   lowercaseEnums?: boolean;
+
+  /**
+   * @name customScalars
+   * @description specify how custom scalar types in your GraphQL Schema should be typed in Dart
+   * @default true
+   *
+   * @exampleMarkdown
+   * ```yml
+   * generates:
+   *   path/to/your/flutter/project/data/models/app_models.dart
+   *     plugins:
+   *       - typescript
+   *       - graphql-codegen-flutter-freezed-classes
+   *     config:
+   *       fileName: app_models
+   *       ignoreTypes: ["PaginatorInfo"]
+   *       fromJsonToJson: true
+   *       customScalars:
+   *         {
+   *           "jsonb": "Map<String, dynamic>",
+   *           "timestamptz": "DateTime",
+   *           "UUID": "String",
+   *         }
+   * ```
+   */
+
+  customScalars?: { [name: string]: string };
 
   /**
    * @name optionalConstructor

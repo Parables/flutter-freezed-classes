@@ -1,3 +1,30 @@
+scalar UUID
+scalar timestamptz
+scalar jsonb
+
+
+type Test {
+	a: [String]
+	b: [ID!]
+	c: [Boolean!]!
+	d: [[Int]]
+	e: [[Float]!]
+	f: [[String]!]!
+	g: jsonb
+	h: timestamptz!
+	i: UUID!
+}
+
+input AInput {
+	b: BInput!
+}
+input BInput {
+	c: CInput!
+}
+input CInput {
+	a: AInput!
+}
+
 enum Episode {
 	NEWHOPE
 	EMPIRE

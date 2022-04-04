@@ -11,9 +11,12 @@ generates:
       lowercaseEnums: false
       unionInputs:
         - CreateBookInput: ["Book", "createInput"]
-      # scalars:
-      #   Date: Date
-      #   DateTime: Date
+      customScalars:
+        {
+          "jsonb": "Map<String, dynamic>",
+          "timestamptz": "DateTime",
+          "UUID": "String",
+        }
   # example/generated/schema.json:
   #   plugins:
   #     - "introspection":
