@@ -39,7 +39,7 @@ class Character with _$Character{
      List<Character?>? friends,
     required String id,
     required String name,
-  }) = _Character;
+  }) = _Character;  
 
 factory Character.fromJson(Map<String, dynamic> json) => _$CharacterFromJson(json);
 }
@@ -56,7 +56,7 @@ class ComplexType with _$ComplexType{
      Map<String, dynamic>? g,
     required DateTime h,
     required String i,
-  }) = _ComplexType;
+  }) = _ComplexType;  
 
 factory ComplexType.fromJson(Map<String, dynamic> json) => _$ComplexTypeFromJson(json);
 }
@@ -87,7 +87,7 @@ class Droid with _$Droid{
     required String id,
     required String name,
      String? primaryFunction,
-  }) = _Droid;
+  }) = _Droid;  
 
 factory Droid.fromJson(Map<String, dynamic> json) => _$DroidFromJson(json);
 }
@@ -107,7 +107,7 @@ class Human with _$Human{
     required String name,
      List<Starship?>? starships,
      int? totalCredits,
-  }) = _Human;
+  }) = _Human;  
 
 factory Human.fromJson(Map<String, dynamic> json) => _$HumanFromJson(json);
 }
@@ -117,7 +117,20 @@ class Movie with _$Movie{
   const factory Movie({
     required String id,
     required String title,
-  }) = _Movie;
+  }) = _Movie;  
+
+const factory Movie.createInput({
+    required String title,
+}) = _CreateMovieInput;
+
+const factory Movie.updateInput({
+    required String id,
+     String? title,
+}) = _UpdateMovieInput;
+
+const factory Movie.deleteInput({
+    required String id,
+}) = _DeleteMovieInput;
 
 factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 }
@@ -125,14 +138,16 @@ factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 @freezed
 class SearchResult with _$SearchResult{
   const factory SearchResult({}) =  _SearchResult;
-  const factory SearchResult.droid({ 
+
+const factory SearchResult.droid({ 
     required List<Episode?> appearsIn,
      List<Character?>? friends,
     required String id,
     required String name,
      String? primaryFunction,
 }) = _Droid;
-  const factory SearchResult.human({ 
+
+const factory SearchResult.human({ 
     required List<Episode?> appearsIn,
      List<Character?>? friends,
     required String id,
@@ -140,7 +155,8 @@ class SearchResult with _$SearchResult{
      List<Starship?>? starships,
      int? totalCredits,
 }) = _Human;
-  const factory SearchResult.starship({ 
+
+const factory SearchResult.starship({ 
     required String id,
      double? length,
     required String name,
@@ -156,7 +172,7 @@ class Starship with _$Starship{
     required String id,
      double? length,
     required String name,
-  }) = _Starship;
+  }) = _Starship;  
 
 factory Starship.fromJson(Map<String, dynamic> json) => _$StarshipFromJson(json);
 }

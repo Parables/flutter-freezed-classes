@@ -19,9 +19,9 @@ This project aims to speed up your development of Flutter apps by generating [Fr
 - [] Support deprecation annotation
 - [] Support for InterfaceTypes
 - [x] Support for UnionTypes [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
-- [] Support for InputTypes as union/sealed classes [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
+- [] Merge InputTypes with ObjectType as union/sealed class [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
 
-## Example:
+## Example
 
 ```yml
 # codegen.yml
@@ -36,22 +36,13 @@ generates:
       lowercaseEnums: false # default: true
       customScalars: { 'jsonb': 'Map<String, dynamic>', 'timestamptz': 'DateTime', 'UUID': 'String' }
       ignoreTypes: ['PageInfo', 'UserPaginator', 'PaginatorInfo']
-      unionInputs:
-        {
-          'CreateMovieInput': ['Movie', 'createInput'],
-          'UpdateMovieInput': ['Movie', 'updateInput'],
-          'DeleteMovieInput': ['Movie', 'deleteInput'],
-        }
+      mergeInputs: ['Create$Input', 'Update$Input', 'Delete$Input']
 ```
 
 ```graphql
 # schema.graphql
 type Movie {
   id: ID!
-  title: String!
-}
-
-input CreateMovieInput {
   title: String!
 }
 
@@ -82,7 +73,7 @@ enum Episode {
 type Starship {
   id: ID!
   name: String!
-  length(unit: LengthUnit = METER): Float
+  length: Float
 }
 
 interface Character {
@@ -209,20 +200,85 @@ class ComplexType with _$ComplexType{
   factory ComplexType.fromJson(Map<String, dynamic> json) => _$ComplexTypeFromJson(json);
 };
 
-// TODO: Support for InputTypes as union/sealed classes
+// TODO: Merge InputTypes with ObjectType as union/sealed classconst
 @freezed
 class Movie with _$Movie {
-  factory Movie({
+  const factory Movie({
     required String id,
     required String title,
   }) = _Movie;
 
-  factory Movie.createInput({
+  const factory Movie.createInput({
     required String title,
   }) = _CreateMovieInput;
 
+  const factory Movie.upsertInput({
+    required String id,
+    required String title,
+  }) = _UpsertMovieInput;
+
+  const factory Movie.updateInput({
+    required String id,
+    String title,
+  }) = _UpdateMovieInput;
+
+  const factory Movie.deleteInput({
+    required String id,
+  }) = _DeleteMovieInput;
+
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 }
+
+// Without mergeInputs
+@freezed
+class Movie with _$Movie{
+  const factory Movie({
+    required String id,
+    required String title,
+  }) = _Movie;
+
+factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
+}
+
+@freezed
+class CreateMovieInput with _$CreateMovieInput{
+  const factory CreateMovieInput({
+    required String title,
+  }) = _CreateMovieInput;
+
+factory CreateMovieInput.fromJson(Map<String, dynamic> json) => _$CreateMovieInputFromJson(json);
+}
+
+@freezed
+class UpdateMovieInput with _$UpdateMovieInput{
+  const factory UpdateMovieInput({
+    required String id,
+     String? title,
+  }) = _UpdateMovieInput;
+
+factory UpdateMovieInput.fromJson(Map<String, dynamic> json) => _$UpdateMovieInputFromJson(json);
+}
+
+@freezed
+class UpsertMovieInput with _$UpsertMovieInput{
+  const factory UpsertMovieInput({
+    required String id,
+    required String title,
+  }) = _UpsertMovieInput;
+
+factory UpsertMovieInput.fromJson(Map<String, dynamic> json) => _$UpsertMovieInputFromJson(json);
+}
+
+
+@freezed
+class DeleteMovieInput with _$DeleteMovieInput{
+  const factory DeleteMovieInput({
+    required String id,
+  }) = _DeleteMovieInput;
+
+factory DeleteMovieInput.fromJson(Map<String, dynamic> json) => _$DeleteMovieInputFromJson(json);
+}
+
 ```
 
 ## Getting started

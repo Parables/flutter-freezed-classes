@@ -15,9 +15,14 @@ import {
 } from 'graphql';
 import { FlutterFreezedClassPluginConfig } from './config/index';
 
+import { camelCase, pascalCase } from 'change-case-all';
+
 const isListType = (typ?: TypeNode): typ is ListTypeNode => typ?.kind === 'ListType';
 const isNonNullType = (typ?: TypeNode): typ is NonNullTypeNode => typ?.kind === 'NonNullType';
 const isNamedType = (typ?: TypeNode): typ is NamedTypeNode => typ?.kind === 'NamedType';
+
+const replaceUnionTypeShape = '===replaceUnionShape';
+const replaceInputBlockAsUnion = '===replaceInputBlock';
 
 const defaultScalars: { [name: string]: string } = {
   ID: 'String',
@@ -46,8 +51,12 @@ export const schemaVisitor = (schema: GraphQLSchema, config: FlutterFreezedClass
 
     shapeMap,
 
+    replaceUnionTypeShape,
+
+    replaceInputBlockAsUnion,
+
     EnumTypeDefinition: (node: EnumTypeDefinitionNode) => {
-      const name = convertName(node.name.value);
+      const name = pascalCase(node.name.value);
 
       const shape =
         node.values
@@ -77,7 +86,7 @@ const generateBlock = (
   config: FlutterFreezedClassPluginConfig,
   node: ObjectTypeDefinitionNode | InputObjectTypeDefinitionNode | UnionTypeDefinitionNode
 ) => {
-  const name = convertName(node.name.value);
+  const name = pascalCase(node.name.value);
   const fromJsonToJson = `factory ${name}.fromJson(Map<String, dynamic> json) => _$${name}FromJson(json);`;
 
   const shape =
@@ -101,6 +110,7 @@ const generateBlock = (
           indent(`const factory ${name}({\n`),
           shape,
           indent(`}) = _${name};`),
+          indent(node.kind == Kind.OBJECT_TYPE_DEFINITION ? getReplaceInputToken(config, name) : ''),
           indent(`\n\n${config.fromJsonToJson ?? true ? fromJsonToJson : ''}\n`),
           '}',
         ].join('');
@@ -119,9 +129,9 @@ const generateBlock = (
 
 const generateUnionTypeBlock = (unionName: string, typeName: string) => {
   return new DeclarationBlock({})
-    .asKind(indent('const factory'))
+    .asKind(indent('\nconst factory'))
     .withName(`${unionName}.${typeName.toLowerCase()}({`)
-    .withContent(`===replace${typeName}===replace}) = _${typeName}`).string;
+    .withContent(`${replaceUnionTypeShape}${typeName}.extra${replaceUnionTypeShape}}) = _${typeName}`).string;
 };
 
 const generateField = (
@@ -172,19 +182,8 @@ const scalarValue = (config: FlutterFreezedClassPluginConfig, scalarName: string
 
 const addComment = (comment?: string) => (comment ? `/// ${comment}` : '');
 
-// TODO: Implement convertName to follow Dart's naming conversion
-const convertName = (name: string, type?: string, options?: { prefix?: string; suffix?: string }) => name;
-
-/* convertName(node, options) {
-  const useTypesPrefix = typeof (options && options.useTypesPrefix) === 'boolean' ? options.useTypesPrefix : true;
-  const useTypesSuffix = typeof (options && options.useTypesSuffix) === 'boolean' ? options.useTypesSuffix : true;
-  let convertedName = '';
-  if (useTypesPrefix) {
-      convertedName += this.config.typesPrefix;
-  }
-  convertedName += this.config.convert(node, options);
-  if (useTypesSuffix) {
-      convertedName += this.config.typesSuffix;
-  }
-  return convertedName;
-} */
+function getReplaceInputToken(config: FlutterFreezedClassPluginConfig, name: string): string {
+  return (
+    config.mergeInputs?.map(p => `${replaceInputBlockAsUnion}${name}$.$${p}${replaceInputBlockAsUnion}`).join('') ?? ''
+  );
+}

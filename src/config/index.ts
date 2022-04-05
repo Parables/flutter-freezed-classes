@@ -114,9 +114,9 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
   customScalars?: { [name: string]: string };
 
   /**
-   * @name unionInputs
-   * @description specify how custom scalar types in your GraphQL Schema should be typed in Dart
-   * @default {}
+   * @name mergeInputs
+   * @description merge InputTypes that follow a naming pattern as a union of an ObjectType where ObjectType is denoted by a $ in the pattern.
+   * @default []
    *
    * @exampleMarkdown
    * ```yml
@@ -135,16 +135,11 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
    *           "timestamptz": "DateTime",
    *           "UUID": "String",
    *         }
-   *      unionInputs:
-   *        {
-   *          'CreateMovieInput': ['Movie', 'createInput'],
-   *          'UpdateMovieInput': ['Movie', 'updateInput'],
-   *          'DeleteMovieInput': ['Movie', 'deleteInput'],
-   *        }
+   *      mergeInputs: ["Create$Input", "Update$Input", "Delete$Input"]
    * ```
    */
 
-  unionInputs?: { [name: string]: string };
+  mergeInputs?: string[];
 
   /**
    * @name optionalConstructor

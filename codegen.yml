@@ -9,8 +9,7 @@ generates:
       ignoreTypes: ["PageInfo", "UserPaginator", "PaginatorInfo"]
       fromJsonToJson: true
       lowercaseEnums: false
-      unionInputs:
-        - CreateMovieInput: ["Movie", "createInput"]
+      mergeInputs: ["Create$Input", "Update$Input", "Delete$Input"]
       customScalars:
         {
           "jsonb": "Map<String, dynamic>",
