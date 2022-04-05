@@ -15,7 +15,7 @@ import {
 } from 'graphql';
 import { FlutterFreezedClassPluginConfig } from './config/index';
 
-import { camelCase, pascalCase } from 'change-case-all';
+import { pascalCase } from 'change-case-all';
 
 const isListType = (typ?: TypeNode): typ is ListTypeNode => typ?.kind === 'ListType';
 const isNonNullType = (typ?: TypeNode): typ is NonNullTypeNode => typ?.kind === 'NonNullType';

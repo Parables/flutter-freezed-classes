@@ -46,13 +46,9 @@ export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.Compl
             const key = second.replace('$', first);
             const namedConstructor = camelCase(second.split('$').join('_'));
             const shape = shapeMap.get(key);
-            console.log('Match found', first, second, key, namedConstructor, shape);
             if (shape) {
-              const output = `\n\nconst factory ${first}.${namedConstructor}({\n${shape}}) = _${key};`;
-              console.log('shape found... replacing part: ', part, ' with output: ', output);
-              return output;
+              return `\n\nconst factory ${first}.${namedConstructor}({\n${shape}}) = _${key};`;
             }
-            console.log('Pattern match but No shape found for part: ', part);
             return '';
           }
 

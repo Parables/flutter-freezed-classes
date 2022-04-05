@@ -17,6 +17,8 @@ generates:
           "UUID": "String",
         }
       defaultConstructorForUnionType: false
+      interfaceNamePrefix: "I"
+      interfaceNameSuffix: "Interface"
   # example/generated/schema.json:
   #   plugins:
   #     - "introspection":

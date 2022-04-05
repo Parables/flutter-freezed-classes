@@ -164,6 +164,48 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
   mergeInputs?: string[];
 
   /**
+   * @name interfaceNamePrefix
+   * @description append this string to the abstract class name for Interface Types
+   * @default ""
+   *
+   * @exampleMarkdown
+   * ```yml
+   * generates:
+   *   path/to/your/flutter/project/data/models/app_models.dart
+   *     plugins:
+   *       - typescript
+   *       - graphql-codegen-flutter-freezed-classes
+   *     config:
+   *       fileName: app_models
+   *       optionalConstructor: true
+   *       interfaceNamePrefix: "I_"
+   * ```
+   */
+
+  interfaceNamePrefix?: string;
+
+  /**
+   * @name interfaceNameSuffix
+   * @description prepend this string to the abstract class name for Interface Types
+   * @default "Interface"
+   *
+   * @exampleMarkdown
+   * ```yml
+   * generates:
+   *   path/to/your/flutter/project/data/models/app_models.dart
+   *     plugins:
+   *       - typescript
+   *       - graphql-codegen-flutter-freezed-classes
+   *     config:
+   *       fileName: app_models
+   *       optionalConstructor: true
+   *       interfaceNameSuffix: "Interface"
+   * ```
+   */
+
+  interfaceNameSuffix?: string;
+
+  /**
    * @name optionalConstructor
    * @description makes all the properties in the Freezed classes optional and rather uses Assert statements to enforce required fields
    * @default false
