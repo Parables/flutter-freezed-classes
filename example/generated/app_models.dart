@@ -137,7 +137,6 @@ factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 
 @freezed
 class SearchResult with _$SearchResult{
-  const factory SearchResult({}) =  _SearchResult;
 
 const factory SearchResult.droid({ 
     required List<Episode?> appearsIn,

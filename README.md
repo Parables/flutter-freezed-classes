@@ -19,7 +19,7 @@ This project aims to speed up your development of Flutter apps by generating [Fr
 - [] Support deprecation annotation
 - [] Support for InterfaceTypes
 - [x] Support for UnionTypes [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
-- [] Merge InputTypes with ObjectType as union/sealed class [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
+- [x] Merge InputTypes with ObjectType as union/sealed class [union/sealed classes](https://pub.dev/packages/freezed#unionssealed-classes)
 
 ## Example
 

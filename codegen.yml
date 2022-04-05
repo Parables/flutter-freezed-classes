@@ -16,6 +16,7 @@ generates:
           "timestamptz": "DateTime",
           "UUID": "String",
         }
+      defaultConstructorForUnionType: false
   # example/generated/schema.json:
   #   plugins:
   #     - "introspection":

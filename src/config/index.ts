@@ -87,6 +87,28 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
   lowercaseEnums?: boolean;
 
   /**
+   * @name defaultConstructorForUnionType
+   * @description UnionTypes in your GraphQL Schema will contain an empty constructor E.g: `const factory SearchResult({}) =  _SearchResult;`
+   * @default true
+   *
+   * @exampleMarkdown
+   * ```yml
+   * generates:
+   *   path/to/your/flutter/project/data/models/app_models.dart
+   *     plugins:
+   *       - typescript
+   *       - graphql-codegen-flutter-freezed-classes
+   *     config:
+   *       fileName: app_models
+   *       ignoreTypes: ["PaginatorInfo"]
+   *       fromJsonToJson: true
+   *       defaultConstructorForUnionType: true
+   * ```
+   */
+
+  defaultConstructorForUnionType?: boolean;
+
+  /**
    * @name customScalars
    * @description specify how custom scalar types in your GraphQL Schema should be typed in Dart
    * @default {}

@@ -100,7 +100,7 @@ const generateBlock = (
     node?.kind == Kind.UNION_TYPE_DEFINITION
       ? [
           indent(`${addComment(node.description?.value)}\n`),
-          indent(`const factory ${name}({}) =  _${name};\n`),
+          config.defaultConstructorForUnionType ?? true ? indent(`const factory ${name}({}) =  _${name};\n`) : '',
           shape,
           indent(`\n\n${config.fromJsonToJson ?? true ? fromJsonToJson : ''}\n`),
           '}',
