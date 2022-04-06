@@ -2,10 +2,6 @@
 
 This project aims to speed up your development of Flutter apps by generating [Freezed](https://pub.dev/packages/freezed) from your GraphQL schema.
 
-## Todo
-
-- [] Submit PR to [visitor-plugin-common](@graphql-codegen/visitor-plugin-common/index.js), to add `|| this._kind === 'class'` to line: 350
-
 ## Features
 
 - [x] Generate Freezed classes for ObjectTypes
