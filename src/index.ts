@@ -4,6 +4,7 @@ import { GraphQLSchema } from 'graphql';
 import { FlutterFreezedClassPluginConfig } from './config';
 import { schemaVisitor } from './schema-visitor';
 import { camelCase } from 'change-case-all';
+import { indent } from '@graphql-codegen/visitor-plugin-common';
 
 export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.ComplexPluginOutput> = (
   schema: GraphQLSchema,
@@ -55,6 +56,11 @@ export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.Compl
           return part;
         })
         .join('');
+    }
+
+    // temporal fix to the bug in  https://github.com/dotansimha/graphql-code-generator/issues/7736
+    if (gen.includes('};')) {
+      return gen.replace('};', '}');
     }
     return gen;
   });

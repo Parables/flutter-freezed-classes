@@ -1,14 +1,35 @@
 {
-  "name": "graphql-codegen-flutter-freezed-classes",
+  "name": "@graphql-codegen/flutter-freezed-classes",
   "version": "0.0.9",
   "description": "GraphQL Code Generator plugin to generate freezed classes from your GraphQL schema",
   "respository": {
     "type": "git",
     "url": "https://github.com/Parables/graphql-codegen-flutter-freezed-classes.git"
   },
-  "main": "dist/main/index.js",
-  "typings": "dist/main/index.d.ts",
-  "module": "dist/module/index.mjs",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/index.mjs",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": {
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs"
+    }
+  },
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "publishConfig": {
+    "directory": "dist",
+    "access": "public"
+  },
   "files": [
     "dist/**/*.{js,ts}",
     "LICENSE",
@@ -25,7 +46,8 @@
     "prettier": "prettier --write --list-different \"**/*.{ts,graphql,yml}\"",
     "prettier:check": "prettier --check \"**/*.{ts,graphql,yml}\"",
     "generate": "run-p build:* && graphql-codegen",
-    "prepublish": "run-p build:*"
+    "prepublish": "run-p build:*",
+    "prepack": "bob prepack"
   },
   "keywords": [
     "gql",
@@ -59,14 +81,17 @@
     "npm-run-all": "^4.1.5",
     "prettier": "2.6.2",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "tslib": "~1.11.1",
+    "graphql": "^16.3.0"
   },
   "dependencies": {
     "@graphql-codegen/plugin-helpers": "^2.4.2",
     "@graphql-codegen/schema-ast": "^2.4.1",
     "@graphql-codegen/visitor-plugin-common": "^2.7.4",
     "@graphql-tools/utils": "^8.6.5",
-    "graphql": "^16.3.0"
+    "tslib": "~1.11.1",
+    "change-case-all": "1.0.14"
   },
   "peerDependencies": {
     "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0"

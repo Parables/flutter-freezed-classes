@@ -7,7 +7,7 @@ generates:
     config:
       fileName: app_models
       ignoreTypes: ["PageInfo", "UserPaginator", "PaginatorInfo"]
-      fromJsonToJson: true
+      fromJsonToJson: false
       lowercaseEnums: false
       mergeInputs: ["Create$Input", "Update$Input", "Delete$Input"]
       customScalars:

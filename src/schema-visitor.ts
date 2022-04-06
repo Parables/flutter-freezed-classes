@@ -13,7 +13,7 @@ import {
   TypeNode,
   UnionTypeDefinitionNode,
 } from 'graphql';
-import { FlutterFreezedClassPluginConfig } from './config/index';
+import { FlutterFreezedClassPluginConfig } from './config';
 
 import { pascalCase } from 'change-case-all';
 
@@ -36,13 +36,12 @@ const defaultScalars: { [name: string]: string } = {
 const shapeMap: Map<string, string> = new Map<string, string>();
 
 const buildImports = (config: FlutterFreezedClassPluginConfig) => {
-  const gImport = `part '${config.fileName}.g.dart';\n\n`;
+  const gImport = `part '${config.fileName}.g.dart';`;
   return [
     "import 'package:freezed_annotation/freezed_annotation.dart';",
     "import 'package:flutter/foundation.dart';\n",
-    `part '${config.fileName}.freezed.dart;`,
-    `${config.fromJsonToJson ?? true ? gImport : ''}`,
-  ];
+    `part '${config.fileName}.freezed.dart;'`,
+  ].concat(config.fromJsonToJson ?? true ? [gImport, '\n\n'] : ['\n']);
 };
 
 export const schemaVisitor = (schema: GraphQLSchema, config: FlutterFreezedClassPluginConfig) => {
@@ -102,8 +101,8 @@ const generateBlock = (
           indent(`${addComment(node.description?.value)}\n`),
           config.defaultConstructorForUnionType ?? true ? indent(`const factory ${name}({}) =  _${name};\n`) : '',
           shape,
-          indent(`\n\n${config.fromJsonToJson ?? true ? fromJsonToJson : ''}\n`),
-          '}',
+          indent(config.fromJsonToJson ?? true ? `\n\n${fromJsonToJson}\n` : ''),
+          '\n}',
         ].join('')
       : [
           indent(`${addComment(node.description?.value)}\n`),
@@ -111,8 +110,8 @@ const generateBlock = (
           shape,
           indent(`}) = _${name};`),
           indent(node.kind == Kind.OBJECT_TYPE_DEFINITION ? getReplaceInputToken(config, name) : ''),
-          indent(`\n\n${config.fromJsonToJson ?? true ? fromJsonToJson : ''}\n`),
-          '}',
+          indent(config.fromJsonToJson ?? true ? `\n\n${fromJsonToJson}\n` : ''),
+          '\n}',
         ].join('');
 
   // don't generate freezed classes for these types
@@ -123,8 +122,9 @@ const generateBlock = (
   return new DeclarationBlock({})
     .withDecorator('@freezed')
     .asKind('class')
-    .withName(`${name} with _$${name}{`)
-    .withContent(content).string;
+    .withName(`${name} with _$${name} {`)
+    .withContent(content)
+    .string.replace('};', '}');
 };
 
 const generateUnionTypeBlock = (unionName: string, typeName: string) => {
