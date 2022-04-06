@@ -1,6 +1,6 @@
 {
   "name": "flutter-freezed-classes",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "GraphQL Code Generator plugin to generate freezed classes from your GraphQL schema",
   "respository": {
     "type": "git",
