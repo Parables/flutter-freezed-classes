@@ -6,7 +6,7 @@ import { schemaVisitor } from './schema-visitor';
 import { camelCase } from 'change-case-all';
 import { indent } from '@graphql-codegen/visitor-plugin-common';
 
-export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.ComplexPluginOutput> = (
+export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.PluginOutput> = (
   schema: GraphQLSchema,
   documents: Types.DocumentFile[],
   config: FlutterFreezedClassPluginConfig
@@ -65,5 +65,5 @@ export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.Compl
     return gen;
   });
 
-  return { prepend: buildImports(config), content: [...finalOutput].join('\n') };
+  return [...buildImports(config), ...finalOutput].join('\n');
 };

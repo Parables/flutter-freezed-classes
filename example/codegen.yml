@@ -16,7 +16,7 @@ generates:
           "timestamptz": "DateTime",
           "UUID": "String",
         }
-      defaultConstructorForUnionType: false
+      unionConstructor: false
       interfaceNamePrefix: "I"
       interfaceNameSuffix: "Interface"
   # example/generated/schema.json:

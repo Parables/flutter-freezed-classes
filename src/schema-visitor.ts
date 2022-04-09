@@ -30,6 +30,7 @@ const defaultScalars: { [name: string]: string } = {
   Boolean: 'bool',
   Int: 'int',
   Float: 'double',
+  DateTime: 'DateTime',
 };
 // const isInput = (kind: string) => kind.includes('Input');
 
@@ -99,7 +100,7 @@ const generateBlock = (
     node?.kind == Kind.UNION_TYPE_DEFINITION
       ? [
           indent(`${addComment(node.description?.value)}\n`),
-          config.defaultConstructorForUnionType ?? true ? indent(`const factory ${name}({}) =  _${name};\n`) : '',
+          config.unionConstructor ?? true ? indent(`const factory ${name}({}) =  _${name};\n`) : '',
           shape,
           indent(config.fromJsonToJson ?? true ? `\n\n${fromJsonToJson}\n` : ''),
           '\n}',

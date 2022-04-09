@@ -66,7 +66,7 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
 
   /**
    * @name lowercaseEnums
-   * @description generate fromJson toJson methods on the classes with json_serialization. Requires the [json_serializable](https://pub.dev/packages/json_serializable) to be installed in your Flutter app
+   * @description make enum fields lowercase
    * @default true
    *
    * @exampleMarkdown
@@ -87,8 +87,8 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
   lowercaseEnums?: boolean;
 
   /**
-   * @name defaultConstructorForUnionType
-   * @description UnionTypes in your GraphQL Schema will contain an empty constructor E.g: `const factory SearchResult({}) =  _SearchResult;`
+   * @name unionConstructor
+   * @description generate empty constructors for Union Types
    * @default true
    *
    * @exampleMarkdown
@@ -102,15 +102,15 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
    *       fileName: app_models
    *       ignoreTypes: ["PaginatorInfo"]
    *       fromJsonToJson: true
-   *       defaultConstructorForUnionType: true
+   *       unionConstructor: true
    * ```
    */
 
-  defaultConstructorForUnionType?: boolean;
+  unionConstructor?: boolean;
 
   /**
    * @name customScalars
-   * @description specify how custom scalar types in your GraphQL Schema should be typed in Dart
+   * @description map custom Scalars to Dart built-in types
    * @default {}
    *
    * @exampleMarkdown
@@ -137,7 +137,7 @@ export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConf
 
   /**
    * @name mergeInputs
-   * @description merge InputTypes that follow a naming pattern as a union of an ObjectType where ObjectType is denoted by a $ in the pattern.
+   * @description merge InputTypes as a union of an ObjectType where ObjectType is denoted by a $ in the pattern.
    * @default []
    *
    * @exampleMarkdown
