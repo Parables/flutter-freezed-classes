@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
 import { generate } from '@graphql-codegen/cli';
-import { Types } from '@graphql-codegen/plugin-helpers';
 import { cli, command, defaultCommand, option } from 'typed-cli';
 import chalk from 'chalk';
 import validator from 'validator';
 import fs from 'fs';
-export { plugin } from './plugin';
+// export { plugin } from './plugin';
 
 const code = (value: string) => chalk.italic.bgGray(value);
 
@@ -20,7 +19,7 @@ cli.commands(
     [defaultCommand]: command({
       name: 'ffc',
       description: 'Displays this help file',
-    }).handle(data => {
+    }).handle(() => {
       console.log(`Description:
     Stop creating manual class/models for your Flutter app. 
     Automate the development process by generating Freezed classes from your GraphQL schema
@@ -84,9 +83,25 @@ Type ffc --help for more`);
           .description(`merge InputTypes of a pattern with an ObjectType as a union/sealed class`),
 
         customScalars: option.string
-          //   .alias('cs')
+          .alias('c')
           .alias('scalars')
           .description(`a JSON.stringify object of custom Scalars to Dart built-in types`),
+
+        watch: option.boolean
+          .label('string|string[]|boolean|undefined')
+          .alias('w')
+          .default(false)
+          .description(`regenerate when GraphQL schemas changes. Accepts a boolean or an array of glob patterns`),
+
+        errorsOnly: option.boolean.alias('E').default(false).description(`print only errors`),
+
+        usePolling: option.boolean.alias('p').default(false).description(`poll for changes`),
+
+        interval: option.number.alias('T').description(`poll every x millisecond`),
+
+        overwrite: option.boolean.alias('O').default(true).description(`overwrite files if they already exist`),
+
+        silent: option.boolean.alias('S').default(false).description(`suppress printing errors when they occur`),
       },
     }).handle(async data => {
       const {
@@ -94,6 +109,13 @@ Type ffc --help for more`);
           schema: _schema,
           output: _output,
           fileName: _fileName,
+
+          watch,
+          overwrite,
+          silent,
+          errorsOnly,
+          usePolling,
+          interval,
           ignoreTypes,
           fromJsonToJson,
           lowercaseEnums,
@@ -123,6 +145,15 @@ Type ffc --help for more`);
 
       await generate(
         {
+          watch: watch,
+          overwrite: overwrite,
+          silent: silent,
+          errorsOnly: errorsOnly,
+          watchConfig: {
+            usePolling: usePolling,
+            interval: interval,
+          },
+
           schema: schema,
           generates: {
             [output]: {
@@ -171,4 +202,3 @@ function setSchema(schema: string | undefined): string | undefined {
     process.exit();
   }
 }
-// generateClasses();

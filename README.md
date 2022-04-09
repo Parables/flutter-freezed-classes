@@ -19,21 +19,13 @@ This project aims to speed up your development of Flutter apps by generating [Fr
 
 ## Example
 
-```yml
-# codegen.yml
-schema: example/schema.graphql
-generates:
-  example/generated/app_models.dart:
-    plugins:
-      - graphql-codegen-flutter-freezed-classes:
-    config:
-      fileName: 'app_models'
-      fromJsonToJson: true
-      lowercaseEnums: false # default: true
-      customScalars: { 'jsonb': 'Map<String, dynamic>', 'timestamptz': 'DateTime', 'UUID': 'String' }
-      ignoreTypes: ['PageInfo', 'UserPaginator', 'PaginatorInfo']
-      mergeInputs: ['Create$Input', 'Update$Input', 'Delete$Input']
+> Using the CLI
+
+```sh
+ ffc generate -s schema.graphql --scalars '{"jsonb": "Map<String, dynamic>","timestamptz": "DateTime", "UUID": "String"}' -m 'Create$Input' -m 'Update$Input' -m 'Upsert$Input' -m 'Delete$Input'
 ```
+
+> Given the following GraphQL schema below
 
 ```graphql
 # schema.graphql
@@ -134,6 +126,8 @@ type ComplexType {
   i: UUID!
 }
 ```
+
+> Generated file
 
 ```dart
 // app_models.dart
@@ -285,13 +279,14 @@ factory DeleteMovieInput.fromJson(Map<String, dynamic> json) => _$DeleteMovieInp
 
 2. Install [json_serializable](https://pub.dev/packages/json_serializable) in your flutter project
 
-3. Create a `codegen.yml` file at the root of your Flutter project
-
-4. Download your GraphQL schema in graphql format and place it at the root of your Flutter project
+3. Download your GraphQL schema in graphql format and place it at the root of your Flutter project
 
 ```sh
 npm install -g graphqurl
 
+gq <graphql-endpoint>  --introspect > schema.graphql
+
+# if your graphql endpoint requires authentication:
 gq <graphql-endpoint> -H "Authorization: Bearer <token>" --introspect > schema.graphql
 ```
 
@@ -299,9 +294,39 @@ gq <graphql-endpoint> -H "Authorization: Bearer <token>" --introspect > schema.g
 
 1. Install the generator globally from [npm](npm)
 
-2. Generate your Freezed classes
+2. Generate your Freezed classes with the CLI
 
-3. Build your imagination
+## CLI Usage
+
+### Description
+
+Generate Freezed classes from your GraphQL Schema
+
+### Usage
+
+```sh
+ffc generate [-jeuEpOS -s <string> -o <string> -f <string> -i <string> -m <string> -c <string> -w <string|string[]|boolean|undefined> -T <number>]
+```
+
+### Options
+
+| Options                                              | Type Definition           | Default values | Description                                                                                             |
+| ---------------------------------------------------- | ------------------------- | -------------- | :------------------------------------------------------------------------------------------------------ |
+| -s, --schema                                         | string                    | optional       | the path to the GraphQL Schema. Default: ./schema.graphql                                               |
+| -o, --output                                         | string                    | optional       | the full path of the output file. Default: `./lib/generated/app_models.dart`                            |
+| -f, --fileName, --file-name                          | string                    | app_models     | the name of the output file without the .dart extension. Appends/replaces the fileName in output option |
+| -i, --ignore, --ignoreTypes, --ignore-types          | string[]                  | []             | names of GraphQL types to ignore when generating Freezed classes                                        |
+| -j, --json, --fromJsonToJson, --from-json-to-json    | boolean                   | true           | generate fromJson and toJson methods on the classes with [json_serialization]()                         |
+| -e, --enum, --lowercaseEnums, --lowercase-enums      | boolean                   | true           | make enum fields lowercase                                                                              |
+| -u, --union, --unionConstructor, --union-constructor | boolean                   | true           | generate empty constructors for Union Types                                                             |
+| -m, --merge, --mergeInputs, --merge-inputs           | string[]                  | []             | merge InputTypes of a pattern with an ObjectType as a union/sealed class                                |
+| -c, --scalars, --customScalars, --custom-scalars     | string                    | optional       | a JSON.stringify object map of custom Scalars to Dart built-in types                                    |
+| -w, --watch                                          | string\|string[]\|boolean | optional       | regenerate when GraphQL schemas changes. Accepts a boolean or an array of glob patterns                 |
+| -E, --errorsOnly, --errors-only                      | boolean                   | optional       | print only errors                                                                                       |
+| -p, --usePolling, --use-polling                      | boolean                   | optional       | poll for changes when watch is unavailable on system                                                    |
+| -T, --interval                                       | number                    | optional       | poll every x millisecond                                                                                |
+| -O, --overwrite                                      | boolean                   | true           | overwrite files if they already exist                                                                   |
+| -S, --silent                                         | boolean                   | optional       | suppress printing errors when they occur                                                                |
 
 ## Contribution
 

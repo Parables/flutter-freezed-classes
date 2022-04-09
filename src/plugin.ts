@@ -4,7 +4,6 @@ import { GraphQLSchema } from 'graphql';
 import { FlutterFreezedClassPluginConfig } from './config';
 import { schemaVisitor } from './schema-visitor';
 import { camelCase } from 'change-case-all';
-import { indent } from '@graphql-codegen/visitor-plugin-common';
 
 export const plugin: PluginFunction<FlutterFreezedClassPluginConfig, Types.PluginOutput> = (
   schema: GraphQLSchema,

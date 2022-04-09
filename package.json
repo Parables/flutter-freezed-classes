@@ -89,8 +89,7 @@
     "change-case-all": "1.0.14",
     "tslib": "~1.11.1",
     "typed-cli": "^1.2.0",
-    "validator": "^13.7.0",
-    "yargs": "^17.4.0"
+    "validator": "^13.7.0"
   },
   "peerDependencies": {
     "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0"
