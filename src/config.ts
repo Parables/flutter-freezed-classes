@@ -1,5 +1,3 @@
-// import { TypeScriptPluginConfig } from '@graphql-codegen/typescript';
-
 export interface FlutterFreezedClassPluginConfig /* extends TypeScriptPluginConfig */ {
   /**
    * @name fileName

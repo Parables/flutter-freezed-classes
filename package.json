@@ -62,7 +62,6 @@
     "typings"
   ],
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/typescript": "^2.4.8",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^27.4.1",
@@ -75,19 +74,17 @@
     "prettier": "2.6.2",
     "ts-jest": "^27.1.4",
     "tslib": "~1.11.1",
+    "bob-the-bundler": "^1.6.1",
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/plugin-helpers": "^2.4.2",
     "@graphql-codegen/schema-ast": "^2.4.1",
     "@graphql-codegen/visitor-plugin-common": "^2.7.4",
     "@graphql-tools/utils": "^8.6.5",
-    "@types/chalk": "^2.2.0",
-    "@types/validator": "^13.7.2",
-    "bob-the-bundler": "^1.6.1",
     "chalk": "^4.1.0",
     "change-case-all": "1.0.14",
-    "tslib": "~1.11.1",
     "typed-cli": "^1.2.0",
     "validator": "^13.7.0"
   },
