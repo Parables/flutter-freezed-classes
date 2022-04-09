@@ -1,4 +1,4 @@
-import { plugin } from '../src';
+import { plugin } from '../src/plugin';
 import { buildSchema } from 'graphql';
 
 describe('Testing Config values=>Flutter Freezed Classes Plugin', () => {
@@ -111,6 +111,6 @@ describe('Testing Config values=>Flutter Freezed Classes Plugin', () => {
       "part 'app_models.g.dart';",
     ];
 
-    expect(result.append).not.toEqual(expect.arrayContaining(expected));
+    expect(result.toString()).not.toEqual(expect.arrayContaining(expected));
   });
 });
