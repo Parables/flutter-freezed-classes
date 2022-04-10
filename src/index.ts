@@ -26,7 +26,9 @@ cli.commands(
     
 Usage:  ffc <command> [<args>] 
 
-Type ffc --help for more`);
+Type ffc --help for more
+
+CLI made with typed-cli https://int0h.github.io/typed-cli-docs/`);
     }),
 
     generate: command({
