@@ -44,7 +44,7 @@
     "prettier": "prettier --write --list-different \"**/*.{ts,graphql,yml}\"",
     "prettier:check": "prettier --check \"**/*.{ts,graphql,yml}\"",
     "generate": "run-p build:* && graphql-codegen",
-    "prepublish": "run-p build:* && cp package.json dist/package.json && chmod u+x ./dist/main/index.js",
+    "prepublish": "run-p build:* && chmod u+x ./dist/main/index.js",
     "prepack": "bob prepack"
   },
   "keywords": [
@@ -62,7 +62,6 @@
     "typings"
   ],
   "devDependencies": {
-    "@graphql-codegen/typescript": "^2.4.8",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^27.4.1",
     "@types/validator": "^13.7.2",
@@ -79,13 +78,8 @@
   },
   "dependencies": {
     "@graphql-codegen/cli": "^2.6.2",
-    "@graphql-codegen/plugin-helpers": "^2.4.2",
-    "@graphql-codegen/schema-ast": "^2.4.1",
-    "@graphql-codegen/visitor-plugin-common": "^2.7.4",
-    "@graphql-tools/utils": "^8.6.5",
     "chalk": "^4.1.0",
-    "change-case-all": "1.0.14",
-    "graphql": "^16.0.0",
+    "graphql-codegen-flutter-freezed-classes-plugin": "^0.0.17",
     "typed-cli": "^1.2.0",
     "validator": "^13.7.0"
   },

@@ -5,7 +5,7 @@ import { cli, command, defaultCommand, option } from 'typed-cli';
 import chalk from 'chalk';
 import validator from 'validator';
 import fs from 'fs';
-export { plugin } from './plugin';
+export { plugin } from 'graphql-codegen-flutter-freezed-classes-plugin';
 
 const code = (value: string) => chalk.italic.bgGray(value);
 
@@ -159,7 +159,7 @@ CLI made with typed-cli https://int0h.github.io/typed-cli-docs/`);
           schema: schema,
           generates: {
             [output]: {
-              plugins: ['../dist/main/plugin.js'],
+              plugins: ['./plugin.ts'],
               config: {
                 fileName: fileName,
                 ignoreTypes: ignoreTypes,

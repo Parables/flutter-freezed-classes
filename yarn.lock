@@ -3231,6 +3231,19 @@ graceful-fs@^4.1.2, graceful-fs@^4.2.9:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
   integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
 
+graphql-codegen-flutter-freezed-classes-plugin@^0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/graphql-codegen-flutter-freezed-classes-plugin/-/graphql-codegen-flutter-freezed-classes-plugin-0.0.17.tgz#ec7d723c140d2ed036577afc7bdb9da0abe7a38d"
+  integrity sha512-gq7epg7bgGDsK7Lea/aR26QMdA/ycHFsrDPXrSGGjwEzmBSu2c5dxMkeI60+kdvoLIO1fr9874qcTsA9PELgnA==
+  dependencies:
+    "@graphql-codegen/cli" "^2.6.2"
+    "@graphql-codegen/plugin-helpers" "^2.4.2"
+    "@graphql-codegen/schema-ast" "^2.4.1"
+    "@graphql-codegen/visitor-plugin-common" "^2.7.4"
+    "@graphql-tools/utils" "^8.6.5"
+    change-case-all "1.0.14"
+    graphql "^16.0.0"
+
 graphql-config@^4.1.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-4.2.0.tgz#031008ccde56eaa2861651d11cf825b78ca0ff0f"
