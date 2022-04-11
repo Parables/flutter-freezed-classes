@@ -181,7 +181,7 @@ const scalarValue = (config: FlutterFreezedClassPluginConfig, scalarName: string
   return scalarName;
 };
 
-const addComment = (comment?: string) => (comment ? `/// ${comment}` : '');
+const addComment = (comment?: string) => (comment ? `/// ${comment}\n` : '');
 
 function getReplaceInputToken(config: FlutterFreezedClassPluginConfig, name: string): string {
   return (
