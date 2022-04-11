@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { generate } from 'graphql-code-generator/packages/graphql-codegen-cli/src/index';
+import { generate } from '@graphql-codegen/cli';
 import { cli, command, defaultCommand, option } from 'typed-cli';
 import chalk from 'chalk';
 import validator from 'validator';
