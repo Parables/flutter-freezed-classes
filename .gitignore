@@ -5,3 +5,4 @@ package-lock.json
 tsconfig.tsbuildinfo
 example/_*.graphql
 example/*.ts
+dist/
