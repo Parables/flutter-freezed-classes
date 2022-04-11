@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { generate } from '@graphql-codegen/cli';
+import { generate } from 'graphql-code-generator/packages/graphql-codegen-cli/src/index';
 import { cli, command, defaultCommand, option } from 'typed-cli';
 import chalk from 'chalk';
 import validator from 'validator';
 import fs from 'fs';
-export { plugin } from 'graphql-codegen-flutter-freezed-classes-plugin';
+export { plugin } from './plugin';
 
 const code = (value: string) => chalk.italic.bgGray(value);
 
@@ -159,7 +159,7 @@ CLI made with typed-cli https://int0h.github.io/typed-cli-docs/`);
           schema: schema,
           generates: {
             [output]: {
-              plugins: ['- graphql-codegen-flutter-freezed-classes-plugin'],
+              plugins: ['../dist/main/plugin.js'],
               config: {
                 fileName: fileName,
                 ignoreTypes: ignoreTypes,

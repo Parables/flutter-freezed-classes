@@ -1,4 +1,4 @@
-import { plugin } from 'graphql-codegen-flutter-freezed-classes-plugin';
+import { plugin } from '../src/plugin';
 import { buildSchema } from 'graphql';
 
 describe('Testing Config values=>Flutter Freezed Classes Plugin', () => {
