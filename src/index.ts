@@ -159,7 +159,7 @@ CLI made with typed-cli https://int0h.github.io/typed-cli-docs/`);
           schema: schema,
           generates: {
             [output]: {
-              plugins: ['./plugin.ts'],
+              plugins: ['graphql-codegen-flutter-freezed-classes-plugin'],
               config: {
                 fileName: fileName,
                 ignoreTypes: ignoreTypes,
