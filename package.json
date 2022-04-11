@@ -84,9 +84,8 @@
     "@graphql-tools/utils": "^8.6.5",
     "chalk": "^4.1.0",
     "change-case-all": "1.0.14",
-    "gcg": "^1.0.9",
     "graphql": "^16.0.0",
-    "graphql-code-gen-for-ffc": "file:/home/parables/Desktop/gcg",
+    "ts-node": "^10.7.0",
     "typed-cli": "^1.2.0",
     "validator": "^13.7.0"
   },
